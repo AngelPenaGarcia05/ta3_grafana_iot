@@ -1,0 +1,138 @@
+Registro de la prueba de escenarios (Fase 6), ejecutada el 2026-10-16 entre 19:04 y 19:25 (hora de Lima).
+Generado automáticamente consultando Grafana cada 15 s (cada 5 s en la segunda prueba de corte).
+T = temperatura (°C), V = vibración (mm/s), I = corriente (A). Niveles: 0 normal, 1 advertencia, 2 crítico.
+Estados de alerta: inactive = inactiva, pending = pendiente (condición cumplida, esperando 30 s), firing = disparada.
+Nota: en la primera prueba de corte el script de registro falló al no haber datos; por eso se repitió el corte al final.
+
+################ ESCENARIO sobrecarga (falla a los 20 s, duracion 330 s) 19:04:49
+19:05:04 T=60.18 V=1.78 I=34.03 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-0.19
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:05:19 T=60.18 V=1.77 I=37.76 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-0.45
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:05:35 T=60.84 V=1.79 I=41.45 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-0.65
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:05:50 T=62.1 V=2.05 I=44.93 | estado=Atencion | Corriente=1,Temperatura=0,Vibración=0 | Pendiente=-0.74
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:pending ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:06:06 T=63.46 V=1.99 I=47.1 | estado=Atencion | Corriente=1,Temperatura=0,Vibración=0 | Pendiente=-0.72
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:pending ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:06:21 T=64.73 V=1.87 I=49.43 | estado=Atencion | Corriente=1,Temperatura=0,Vibración=0 | Pendiente=-0.59
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:06:36 T=66.2 V=1.7 I=51 | estado=RIESGO | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=-0.38
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:pending ; sin datos por más de 3:inactive
+19:06:52 T=67.93 V=1.77 I=52.13 | estado=(lectura con formato distinto, corregido después) | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=-0.01
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:pending ; sin datos por más de 3:inactive
+19:07:07 T=69.77 V=1.6 I=52.42 | estado=RIESGO | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=0.47
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:07:23 T=71.12 V=1.71 I=52.5 | estado=RIESGO | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=0.99
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:07:38 T=73.22 V=1.49 I=52.53 | estado=RIESGO | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=1.66
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:07:53 T=74.2 V=1.52 I=52.97 | estado=RIESGO | Corriente=2,Temperatura=0,Vibración=0 | Pendiente=2.21
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:08:09 T=75.23 V=1.59 I=53.03 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=2.73
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:08:24 T=76.57 V=1.44 I=53.16 | estado=(lectura con formato distinto, corregido después) | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=3.23
+          alertas: temperatura de carcasa:pending ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:08:39 T=77.58 V=1.34 I=53.68 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=3.69
+          alertas: temperatura de carcasa:pending ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:08:55 T=78.71 V=1.45 I=52.79 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=4.1
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:09:10 T=79.81 V=1.49 I=52.86 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=4.51
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:09:26 T=81.19 V=1.55 I=51.65 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=4.84
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:09:41 T=81.72 V=1.66 I=52.02 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=5.05
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:09:56 T=82.14 V=1.78 I=51.16 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=5.16
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:10:12 T=82.84 V=1.9 I=51.77 | estado=(lectura con formato distinto, corregido después) | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=5.09
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+19:10:27 T=83.86 V=1.86 I=50.89 | estado=RIESGO | Corriente=2,Temperatura=1,Vibración=0 | Pendiente=4.95
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:firing ; estado RIESGO DE FALLA:firing ; sin datos por más de 3:inactive
+################ ESCENARIO desgaste_rodamiento (falla a los 20 s, duracion 240 s) 19:10:29
+19:10:45 T=59.88 V=1.7 I=34.57 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=3.22
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:11:00 T=60.36 V=1.84 I=35.35 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=1.7
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:11:15 T=60.68 V=2.26 I=35.54 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.29
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:11:31 T=61.16 V=2.27 I=35.17 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-0.99
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:11:46 T=61.54 V=2.71 I=36.39 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-2.08
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:12:02 T=62.16 V=2.94 I=36.48 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-3.0
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:12:17 T=62.13 V=3.12 I=37.23 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-3.77
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:pending ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:12:32 T=62.41 V=3.34 I=37.78 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.37
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:pending ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:12:48 T=63.07 V=3.22 I=38.13 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.71
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:13:03 T=63.7 V=3.36 I=38.19 | estado=(lectura con formato distinto, corregido después) | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.93
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:13:18 T=63.96 V=3.26 I=37.73 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-5.0
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:13:34 T=64.24 V=3.81 I=38.15 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.89
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:13:49 T=64.62 V=3.81 I=38.16 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.66
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:14:05 T=64.99 V=4.09 I=37.11 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-4.16
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:14:20 T=65.19 V=3.92 I=36.88 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-3.48
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:14:35 T=65.71 V=4.06 I=37.13 | estado=Atencion | Corriente=0,Temperatura=0,Vibración=1 | Pendiente=-2.61
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:firing ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+################ ESCENARIO sobrecalentamiento (falla a los 20 s, duracion 270 s) 19:14:38
+19:14:53 T=59.74 V=1.85 I=34.26 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-1.85
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:15:08 T=60.59 V=1.83 I=34.38 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=-1.01
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:15:24 T=62.69 V=1.96 I=34.39 | estado=(lectura con formato distinto, corregido después) | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.13
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:15:39 T=64.26 V=1.86 I=34.94 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.53
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:15:54 T=66.21 V=1.98 I=36.24 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.54
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:16:10 T=68.04 V=2.0 I=36.47 | estado=(lectura con formato distinto, corregido después) | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.62
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:16:25 T=69.84 V=1.55 I=35.59 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=0.82
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:16:41 T=71.46 V=1.65 I=36.01 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=1.1
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:16:56 T=73.24 V=1.66 I=36.45 | estado=(lectura con formato distinto, corregido después) | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=1.45
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:17:11 T=74.52 V=1.66 I=36.49 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=1.82
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:17:27 T=75.59 V=1.58 I=37.08 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=2.23
+          alertas: temperatura de carcasa:pending ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:17:42 T=77 V=1.48 I=37.09 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=2.66
+          alertas: temperatura de carcasa:pending ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:17:57 T=78.33 V=1.38 I=36.88 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=3.1
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:18:13 T=79.76 V=1.31 I=34.95 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=3.61
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:18:28 T=80.71 V=1.25 I=35.12 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=4.02
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:18:43 T=81.28 V=1.3 I=34.04 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=4.38
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:18:59 T=82.49 V=1.45 I=34.92 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=4.71
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:19:14 T=83.18 V=1.56 I=34.5 | estado=Atencion | Corriente=0,Temperatura=1,Vibración=0 | Pendiente=5.01
+          alertas: temperatura de carcasa:firing ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+################ ESCENARIO corte (corte a los 30 s) 19:19:16
+19:19:32 T=60.11 V=1.57 I=34.71 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=3.98
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:19:47 T=60.6 V=1.65 I=35.49 | estado=Normal | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=2.7
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+19:20:03 T=60.6 V=1.67 I=35.39 | estado=(lectura con formato distinto, corregido después) | Corriente=0,Temperatura=0,Vibración=0 | Pendiente=2.32
+          alertas: temperatura de carcasa:inactive ; vibración sobre 2.8 mm:inactive ; corriente sobre 44 A:inactive ; estado RIESGO DE FALLA:inactive ; sin datos por más de 3:inactive
+################ FIN 19:21:09
+
+################ SEGUNDA PRUEBA DE CORTE (falla a los 45 s), vigilando cada 5 s
+Última lectura publicada: 2026-10-17T00:23:16Z (19:23:16 hora de Lima).
+19:23:47 panel de estado = sin datos | 19:23:58 alerta 'sin datos por más de 30 s' = disparada
+
+################ MENSAJES DEL TÓPICO fabrica/envasado1/motor01/estado DURANTE LA PRIMERA PRUEBA DE CORTE
+19:19:17 retain=True {"machine_id": "motor-01", "line": "envasado-1", "status": "offline", "motivo": "desconexion_inesperada", "simulado": true}
+19:19:17 retain=False {"machine_id": "motor-01", "line": "envasado-1", "status": "online", "motivo": "nodo_conectado", "timestamp": "2026-10-17T00:19:17.274Z", "simulado": true}
+19:20:09 retain=False {"machine_id": "motor-01", "line": "envasado-1", "status": "offline", "motivo": "desconexion_inesperada", "simulado": true}

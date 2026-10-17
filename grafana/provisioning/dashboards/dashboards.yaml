@@ -1,0 +1,14 @@
+# Indica a Grafana que cargue los dashboards guardados como archivos JSON
+# en /var/lib/grafana/dashboards (carpeta grafana/dashboards del proyecto).
+
+apiVersion: 1
+
+providers:
+  - name: TA3
+    folder: TA3 Mantenimiento predictivo
+    type: file
+    disableDeletion: true
+    allowUiUpdates: false
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards

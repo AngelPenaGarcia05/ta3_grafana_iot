@@ -1,0 +1,227 @@
+# Reglas de alerta de Grafana para el motor-01, creadas automáticamente al arrancar.
+#
+# Cada regla se evalúa cada 10 s. Una regla de umbral pasa a "Pendiente" apenas se
+# cumple la condición y solo se DISPARA si la condición se mantiene más de 30 s
+# (así se evitan falsas alarmas por picos momentáneos).
+#
+# Umbrales: supuestos del caso, a validar con el fabricante.
+# Notificaciones: no hay correo ni mensajería configurados (no hay servidor de correo
+# en este laboratorio). Las alertas se ven en Grafana (menú Alertas y panel
+# "Alertas activas" del dashboard).
+
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: motor01-alertas
+    folder: TA3 Mantenimiento predictivo
+    interval: 10s
+    rules:
+
+      # -------------------------------------------------------------------
+      # 1. Temperatura de carcasa sobre 75 °C por más de 30 s
+      # -------------------------------------------------------------------
+      - uid: ta3-temperatura-alta
+        title: "Motor-01: temperatura de carcasa sobre 75 °C"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: { from: 60, to: 0 }
+            datasourceUid: influxdb-planta
+            model:
+              refId: A
+              query: |
+                from(bucket: "planta")
+                  |> range(start: -30s)
+                  |> filter(fn: (r) => r._measurement == "temperatura_motor" and r._field == "temperature_c" and r.machine_id == "motor-01")
+                  |> last()
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last, settings: { mode: dropNN } }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator: { type: gt, params: [75] }
+        for: 30s
+        noDataState: OK
+        execErrState: Error
+        labels: { severidad: advertencia, equipo: motor-01, linea: envasado-1 }
+        annotations:
+          summary: "Temperatura de carcasa alta en motor-01"
+          description: "La temperatura de carcasa está en {{ humanize $values.B.Value }} °C, sobre el umbral de advertencia de 75 °C por más de 30 s (crítico: 85 °C)."
+          __dashboardUid__: ta3-motor01
+          __panelId__: "12"
+
+      # -------------------------------------------------------------------
+      # 2. Vibración sobre 2.8 mm/s por más de 30 s
+      # -------------------------------------------------------------------
+      - uid: ta3-vibracion-alta
+        title: "Motor-01: vibración sobre 2.8 mm/s"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: { from: 60, to: 0 }
+            datasourceUid: influxdb-planta
+            model:
+              refId: A
+              query: |
+                from(bucket: "planta")
+                  |> range(start: -30s)
+                  |> filter(fn: (r) => r._measurement == "vibracion_motor" and r._field == "vibration_mms" and r.machine_id == "motor-01")
+                  |> last()
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last, settings: { mode: dropNN } }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator: { type: gt, params: [2.8] }
+        for: 30s
+        noDataState: OK
+        execErrState: Error
+        labels: { severidad: advertencia, equipo: motor-01, linea: envasado-1 }
+        annotations:
+          summary: "Vibración alta en motor-01"
+          description: "La vibración RMS está en {{ humanize $values.B.Value }} mm/s, sobre el umbral de advertencia de 2.8 mm/s por más de 30 s (crítico: 7.1 mm/s). Posible desgaste de rodamiento."
+          __dashboardUid__: ta3-motor01
+          __panelId__: "16"
+
+      # -------------------------------------------------------------------
+      # 3. Corriente sobre 44 A por más de 30 s
+      # -------------------------------------------------------------------
+      - uid: ta3-corriente-alta
+        title: "Motor-01: corriente sobre 44 A"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: { from: 60, to: 0 }
+            datasourceUid: influxdb-planta
+            model:
+              refId: A
+              query: |
+                from(bucket: "planta")
+                  |> range(start: -30s)
+                  |> filter(fn: (r) => r._measurement == "consumo_motor" and r._field == "current_a" and r.machine_id == "motor-01")
+                  |> last()
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last, settings: { mode: dropNN } }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator: { type: gt, params: [44] }
+        for: 30s
+        noDataState: OK
+        execErrState: Error
+        labels: { severidad: advertencia, equipo: motor-01, linea: envasado-1 }
+        annotations:
+          summary: "Corriente alta en motor-01"
+          description: "La corriente está en {{ humanize $values.B.Value }} A, sobre el umbral de advertencia de 44 A por más de 30 s (crítico: 50 A). Posible sobrecarga."
+          __dashboardUid__: ta3-motor01
+          __panelId__: "20"
+
+      # -------------------------------------------------------------------
+      # 4. Estado combinado de la máquina en "Riesgo de falla" por más de 30 s
+      #    (dos o más variables en advertencia, o cualquiera en crítico)
+      # -------------------------------------------------------------------
+      - uid: ta3-estado-riesgo
+        title: "Motor-01: estado RIESGO DE FALLA"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: { from: 60, to: 0 }
+            datasourceUid: influxdb-planta
+            model:
+              refId: A
+              query: |
+                nivel = (m, f, adv, crit) => from(bucket: "planta")
+                  |> range(start: -30s)
+                  |> filter(fn: (r) => r._measurement == m and r._field == f and r.machine_id == "motor-01")
+                  |> last()
+                  |> map(fn: (r) => ({_time: r._time, _value: if r._value > crit then 2 else if r._value > adv then 1 else 0}))
+
+                union(tables: [
+                  nivel(m: "temperatura_motor", f: "temperature_c", adv: 75.0, crit: 85.0),
+                  nivel(m: "vibracion_motor", f: "vibration_mms", adv: 2.8, crit: 7.1),
+                  nivel(m: "consumo_motor", f: "current_a", adv: 44.0, crit: 50.0)
+                ])
+                  |> group()
+                  |> reduce(identity: {advertencias: 0, criticos: 0, _time: time(v: 0)},
+                            fn: (r, accumulator) => ({
+                              advertencias: accumulator.advertencias + (if r._value >= 1 then 1 else 0),
+                              criticos: accumulator.criticos + (if r._value == 2 then 1 else 0),
+                              _time: if r._time > accumulator._time then r._time else accumulator._time}))
+                  |> map(fn: (r) => ({_time: r._time,
+                                      _value: if r.criticos > 0 or r.advertencias >= 2 then 2 else if r.advertencias == 1 then 1 else 0}))
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last, settings: { mode: dropNN } }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator: { type: gt, params: [1.5] }
+        for: 30s
+        noDataState: OK
+        execErrState: Error
+        labels: { severidad: critica, equipo: motor-01, linea: envasado-1 }
+        annotations:
+          summary: "Motor-01 en RIESGO DE FALLA"
+          description: "El estado combinado del motor-01 es Riesgo de falla (dos o más variables en advertencia, o alguna en crítico) por más de 30 s. Revisar el equipo."
+          __dashboardUid__: ta3-motor01
+          __panelId__: "3"
+
+      # -------------------------------------------------------------------
+      # 5. Sin datos del motor-01 durante 30 s (corte de comunicación)
+      # -------------------------------------------------------------------
+      - uid: ta3-sin-datos
+        title: "Motor-01: sin datos por más de 30 s"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: { from: 60, to: 0 }
+            datasourceUid: influxdb-planta
+            model:
+              refId: A
+              query: |
+                from(bucket: "planta")
+                  |> range(start: -30s)
+                  |> filter(fn: (r) => r.machine_id == "motor-01")
+                  |> group()
+                  |> count()
+          - refId: B
+            datasourceUid: __expr__
+            model: { refId: B, type: reduce, expression: A, reducer: last }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator: { type: lt, params: [1] }
+        for: 0s
+        # Si la consulta no devuelve nada (ninguna lectura en 30 s) la alerta se dispara
+        noDataState: Alerting
+        execErrState: Error
+        labels: { severidad: critica, equipo: motor-01, linea: envasado-1 }
+        annotations:
+          summary: "Sin datos del motor-01"
+          description: "No llega ninguna lectura del motor-01 desde hace más de 30 s. Posible corte de comunicación o del nodo IoT."
+          __dashboardUid__: ta3-motor01
+          __panelId__: "3"

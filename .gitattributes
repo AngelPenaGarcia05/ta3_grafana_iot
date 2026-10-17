@@ -1,0 +1,3 @@
+# Mantener finales de línea de Linux (LF) en todos los archivos de texto.
+# Los archivos de configuración se montan dentro de contenedores Linux.
+* text=auto eol=lf

@@ -1,0 +1,18 @@
+Prueba 4: visualización. Resultado de ejecutar, a través de la API de Grafana, la consulta de cada panel del dashboard ta3-motor01 (últimos 5 min).
+Ejecutada con un script de verificación el 2026-10-16 19:48:04 (hora de Lima). No reemplaza la captura de pantalla del dashboard.
+
+[stat      ] Estado de la máquina                       unidad=none         A: 1 puntos, ultimo=0
+[stat      ] Nivel por variable                         unidad=none         A: 3 puntos, ultimo=0
+[stat      ] Tendencia: pendiente de temperatura        unidad=suffix: °C/min A: 1 puntos, ultimo=-8.189370058834319
+[stat      ] Tendencia: vibración promedio móvil 1 min  unidad=suffix: mm/s A: 1 puntos, ultimo=1.61853125
+[stat      ] Última temperatura de carcasa              unidad=celsius      A: 1 puntos, ultimo=60.06
+[gauge     ] Temperatura respecto a los umbrales        unidad=celsius      A: 1 puntos, ultimo=60.06
+[stat      ] Promedio, mínimo y máximo del periodo      unidad=celsius      A: 1 puntos, ultimo=80.18675 | B: 1 puntos, ultimo=59.69 | C: 1 puntos, ultimo=90.39
+[timeseries] Evolución de la temperatura de carcasa     unidad=celsius      A: 40 puntos, ultimo=60.06
+[stat      ] Última vibración                           unidad=suffix: mm/s A: 1 puntos, ultimo=1.738
+[gauge     ] Vibración respecto a los umbrales          unidad=suffix: mm/s A: 1 puntos, ultimo=1.738
+[timeseries] Evolución de la vibración y promedio móvil unidad=suffix: mm/s A: 41 puntos, ultimo=1.8014999999999999 | B: 32 puntos, ultimo=1.7252222222222222
+[stat      ] Última corriente                           unidad=amp          A: 1 puntos, ultimo=35.98
+[stat      ] Última potencia                            unidad=kwatt        A: 1 puntos, ultimo=20.37
+[timeseries] Evolución de la corriente                  unidad=amp          A: 41 puntos, ultimo=35.455
+[timeseries] Evolución de la potencia                   unidad=kwatt        A: 41 puntos, ultimo=20.07

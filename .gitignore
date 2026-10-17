@@ -1,0 +1,24 @@
+# Credenciales reales (usar .env.example como plantilla)
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Datos locales de contenedores (si se usan carpetas en vez de volúmenes)
+data/
+
+# Sistema operativo y editores
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Registros
+*.log
+
+# Notas locales del proyecto (no se suben)
+CLAUDE.md

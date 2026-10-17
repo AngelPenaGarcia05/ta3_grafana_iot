@@ -1,0 +1,1328 @@
+{
+  "uid": "ta3-motor01",
+  "title": "Motor-01 | Línea envasado-1 (SIMULADOR)",
+  "description": "Monitoreo del motor eléctrico de 22 kW de la cinta transportadora. Datos generados por un SIMULADOR. Umbrales supuestos del caso.",
+  "tags": [
+    "TA3",
+    "motor-01",
+    "envasado-1",
+    "simulador"
+  ],
+  "editable": false,
+  "graphTooltip": 1,
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "version": 3,
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m"
+    ]
+  },
+  "timezone": "browser",
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 3
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Equipo:** motor eléctrico de 22 kW, cinta transportadora (`motor-01`, línea `envasado-1`). **Origen de los datos:** SIMULADOR en Python (no es un sensor físico).  \n**Umbrales (supuestos del caso, a validar con el fabricante):** temperatura de carcasa: advertencia > 75 °C, crítico > 85 °C | vibración RMS: advertencia > 2.8 mm/s, crítico > 7.1 mm/s | corriente: advertencia > 44 A, crítico > 50 A."
+      }
+    },
+    {
+      "id": 2,
+      "type": "row",
+      "title": "Estado de la máquina y tendencias",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 3,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Estado de la máquina",
+      "description": "Normal: ninguna variable en advertencia. Atención: una variable en advertencia. Riesgo de falla: dos o más en advertencia, o cualquiera en crítico. Usa la última lectura de cada variable de los últimos 30 s; si no hay datos muestra 'Sin datos'.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 6,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "nivel = (m, f, nombre, adv, crit) => from(bucket: \"planta\")\n  |> range(start: -30s)\n  |> filter(fn: (r) => r._measurement == m and r._field == f and r.machine_id == \"motor-01\")\n  |> last()\n  |> map(fn: (r) => ({_time: r._time, _field: nombre, _value: if r._value > crit then 2 else if r._value > adv then 1 else 0}))\n\nunion(tables: [\n  nivel(m: \"temperatura_motor\", f: \"temperature_c\", nombre: \"Temperatura\", adv: 75.0, crit: 85.0),\n  nivel(m: \"vibracion_motor\", f: \"vibration_mms\", nombre: \"Vibración\", adv: 2.8, crit: 7.1),\n  nivel(m: \"consumo_motor\", f: \"current_a\", nombre: \"Corriente\", adv: 44.0, crit: 50.0)\n])\n  |> group()\n  |> reduce(identity: {advertencias: 0, criticos: 0, _time: time(v: 0)},\n            fn: (r, accumulator) => ({\n              advertencias: accumulator.advertencias + (if r._value >= 1 then 1 else 0),\n              criticos: accumulator.criticos + (if r._value == 2 then 1 else 0),\n              _time: if r._time > accumulator._time then r._time else accumulator._time}))\n  |> map(fn: (r) => ({_time: r._time,\n                      _value: if r.criticos > 0 or r.advertencias >= 2 then 2 else if r.advertencias == 1 then 1 else 0}))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "displayName": "Estado",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Normal",
+                  "color": "green",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Atención",
+                  "color": "orange",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Riesgo de falla",
+                  "color": "red",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "noValue": "Sin datos (más de 30 s)"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Nivel por variable",
+      "description": "Nivel de cada variable según sus umbrales: Normal, Advertencia o Crítico.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 4,
+        "w": 8,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "nivel = (m, f, nombre, adv, crit) => from(bucket: \"planta\")\n  |> range(start: -30s)\n  |> filter(fn: (r) => r._measurement == m and r._field == f and r.machine_id == \"motor-01\")\n  |> last()\n  |> map(fn: (r) => ({_time: r._time, _field: nombre, _value: if r._value > crit then 2 else if r._value > adv then 1 else 0}))\n\nunion(tables: [\n  nivel(m: \"temperatura_motor\", f: \"temperature_c\", nombre: \"Temperatura\", adv: 75.0, crit: 85.0),\n  nivel(m: \"vibracion_motor\", f: \"vibration_mms\", nombre: \"Vibración\", adv: 2.8, crit: 7.1),\n  nivel(m: \"consumo_motor\", f: \"current_a\", nombre: \"Corriente\", adv: 44.0, crit: 50.0)\n])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Normal",
+                  "color": "green",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Advertencia",
+                  "color": "orange",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Crítico",
+                  "color": "red",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "noValue": "Sin datos"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value_and_name",
+        "orientation": "vertical"
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Tendencia: pendiente de temperatura",
+      "description": "Velocidad de cambio de la temperatura de carcasa en los últimos 5 min (regresión lineal), en °C por minuto. Indicativo: naranja > 1 °C/min, rojo > 2 °C/min (supuestos).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 4,
+        "w": 5,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\" and r._field == \"temperature_c\" and r.machine_id == \"motor-01\")\n  |> map(fn: (r) => ({r with x: float(v: int(v: r._time) - int(v: now())) / 60000000000.0}))\n  |> reduce(identity: {n: 0.0, sx: 0.0, sy: 0.0, sxy: 0.0, sxx: 0.0},\n            fn: (r, accumulator) => ({\n              n: accumulator.n + 1.0,\n              sx: accumulator.sx + r.x,\n              sy: accumulator.sy + r._value,\n              sxy: accumulator.sxy + r.x * r._value,\n              sxx: accumulator.sxx + r.x * r.x}))\n  |> filter(fn: (r) => r.n >= 3.0)\n  |> map(fn: (r) => ({_time: now(), _field: \"Pendiente\",\n                      _value: (r.n * r.sxy - r.sx * r.sy) / (r.n * r.sxx - r.sx * r.sx)}))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: °C/min",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "displayName": "Pendiente"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Tendencia: vibración promedio móvil 1 min",
+      "description": "Promedio de las lecturas de vibración del último minuto. Umbrales 2.8 y 7.1 mm/s.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 4,
+        "w": 5,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: -1m)\n  |> filter(fn: (r) => r._measurement == \"vibracion_motor\" and r._field == \"vibration_mms\" and r.machine_id == \"motor-01\")\n  |> mean()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: mm/s",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.8
+              },
+              {
+                "color": "red",
+                "value": 7.1
+              }
+            ]
+          },
+          "displayName": "Promedio 1 min"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 7,
+      "type": "alertlist",
+      "title": "Alertas activas (Grafana Alerting)",
+      "description": "Reglas de alerta del motor-01 que están disparadas, pendientes o sin datos.",
+      "gridPos": {
+        "x": 0,
+        "y": 11,
+        "w": 24,
+        "h": 6
+      },
+      "options": {
+        "viewMode": "list",
+        "groupMode": "default",
+        "groupBy": [],
+        "maxItems": 20,
+        "sortOrder": 1,
+        "dashboardAlerts": false,
+        "alertName": "",
+        "alertInstanceLabelFilter": "",
+        "showInstances": true,
+        "stateFilter": {
+          "firing": true,
+          "pending": true,
+          "noData": true,
+          "normal": false,
+          "error": true
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "row",
+      "title": "Temperatura de carcasa (cada 5 s)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "Última temperatura de carcasa",
+      "description": "Última lectura. Verde: normal. Naranja: advertencia (> 75 °C). Rojo: crítico (> 85 °C).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 8,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "displayName": "Temperatura"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 10,
+      "type": "gauge",
+      "title": "Temperatura respecto a los umbrales",
+      "description": "Indicador de aguja con las zonas normal, advertencia (75 °C) y crítico (85 °C).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 18,
+        "w": 8,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Temperatura",
+          "unit": "celsius",
+          "decimals": 1,
+          "min": 20,
+          "max": 100,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Promedio, mínimo y máximo del periodo",
+      "description": "Calculados sobre el rango de tiempo seleccionado arriba a la derecha.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 18,
+        "w": 8,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> mean()"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> min()"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> max()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Promedio"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Mínimo"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Máximo"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value_and_name",
+        "orientation": "vertical"
+      }
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "Evolución de la temperatura de carcasa",
+      "description": "Lecturas cada 5 s. Línea naranja: advertencia (75 °C). Línea roja: crítico (85 °C).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"temperature_c\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Temperatura de carcasa",
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "°C",
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "min": 40,
+          "max": 95,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "row",
+      "title": "Vibración, velocidad RMS (cada 1 s)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 34,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Última vibración",
+      "description": "Velocidad RMS. Verde: normal (hasta 2.8 mm/s). Naranja: advertencia (> 2.8). Rojo: crítico (> 7.1).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 6,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"vibracion_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"vibration_mms\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: mm/s",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.8
+              },
+              {
+                "color": "red",
+                "value": 7.1
+              }
+            ]
+          },
+          "displayName": "Vibración"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 15,
+      "type": "gauge",
+      "title": "Vibración respecto a los umbrales",
+      "description": "Indicador de aguja con marcas en 2.8 mm/s (advertencia) y 7.1 mm/s (crítico).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 35,
+        "w": 6,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"vibracion_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"vibration_mms\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Vibración",
+          "unit": "suffix: mm/s",
+          "decimals": 2,
+          "min": 0,
+          "max": 10,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.8
+              },
+              {
+                "color": "red",
+                "value": 7.1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true,
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 16,
+      "type": "timeseries",
+      "title": "Evolución de la vibración y promedio móvil",
+      "description": "Lecturas cada 1 s (morado) y promedio móvil de 1 minuto (blanco, tendencia). Línea naranja: advertencia (2.8 mm/s). Línea roja: crítico (7.1 mm/s).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"vibracion_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"vibration_mms\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"vibracion_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"vibration_mms\")\n  |> timedMovingAverage(every: 10s, period: 1m)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: mm/s",
+          "decimals": 2,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "purple"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "mm/s",
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "min": 0,
+          "max": 9,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.8
+              },
+              {
+                "color": "red",
+                "value": 7.1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Vibración RMS"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Promedio móvil 1 min"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "text"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "dash",
+                  "dash": [
+                    10,
+                    6
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "row",
+      "title": "Consumo eléctrico (cada 2 s)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 43,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 18,
+      "type": "stat",
+      "title": "Última corriente",
+      "description": "Verde: normal. Naranja: advertencia (> 44 A). Rojo: crítico (> 50 A).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 44,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"consumo_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"current_a\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "amp",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 44
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          },
+          "displayName": "Corriente"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 19,
+      "type": "stat",
+      "title": "Última potencia",
+      "description": "Potencia activa estimada a partir de la corriente: raíz(3) x 380 V x I x 0.86 / 1000 (supuestos). Motor de 22 kW nominales.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 48,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"consumo_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"power_kw\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kwatt",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "displayName": "Potencia"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "orientation": "auto"
+      }
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Evolución de la corriente",
+      "description": "Lecturas cada 2 s. Línea naranja: advertencia (44 A). Línea roja: crítico (50 A).",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 44,
+        "w": 9,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"consumo_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"current_a\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Corriente",
+          "unit": "amp",
+          "decimals": 1,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "yellow"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "A",
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "min": 20,
+          "max": 60,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 44
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Evolución de la potencia",
+      "description": "Potencia activa estimada (kW) derivada de la corriente.",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-planta"
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 44,
+        "w": 9,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-planta"
+          },
+          "query": "from(bucket: \"planta\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"consumo_motor\")\n  |> filter(fn: (r) => r.machine_id == \"motor-01\")\n  |> filter(fn: (r) => r._field == \"power_kw\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Potencia",
+          "unit": "kwatt",
+          "decimals": 1,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "kW",
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "min": 10,
+          "max": 35
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    }
+  ]
+}

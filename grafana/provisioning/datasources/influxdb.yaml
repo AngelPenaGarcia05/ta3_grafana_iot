@@ -1,0 +1,21 @@
+# Fuente de datos de Grafana creada automáticamente al arrancar (provisioning).
+# Conecta Grafana con InfluxDB usando el lenguaje de consultas Flux.
+# Los valores ${...} vienen de las variables de entorno del contenedor (archivo .env).
+
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB planta
+    uid: influxdb-planta
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    isDefault: true
+    editable: false
+    jsonData:
+      version: Flux
+      organization: ${INFLUXDB_ORG}
+      defaultBucket: ${INFLUXDB_BUCKET}
+      timeInterval: 5s
+    secureJsonData:
+      token: ${INFLUXDB_TOKEN}

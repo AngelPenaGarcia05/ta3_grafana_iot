@@ -1,0 +1,67 @@
+Prueba 1: lectura normal. Consola del SIMULADOR en escenario normal durante unos 30 s.
+Ejecutada con un script de verificación el 2026-10-16 19:48:04 (hora de Lima).
+
+==============================================================================
+ SIMULADOR DE NODO IoT (no es un sensor físico)
+ Equipo: motor-01 | Línea: envasado-1 | Broker: localhost:1883
+ Temperatura cada 5 s | Vibración cada 1 s | Corriente y potencia cada 2 s
+ Potencia calculada con 380 V trifásico y factor de potencia 0.86
+ Escenario: normal (Operación normal, todas las variables dentro de rango)
+ Para detenerlo presione Ctrl+C
+==============================================================================
+[MQTT] Conectado al broker localhost:1883. Estado publicado: online (retenido) en fabrica/envasado1/motor01/estado
+2026-10-17T00:48:07.005Z  vibración   =  1.722 mm/s            [normal]  enviado
+2026-10-17T00:48:07.010Z  corriente   =  34.48 A  potencia = 19.52 kW  [normal]  enviado
+2026-10-17T00:48:07.010Z  temperatura =  60.02 °C              [normal]  enviado
+2026-10-17T00:48:08.005Z  vibración   =  1.643 mm/s            [normal]  enviado
+2026-10-17T00:48:09.005Z  vibración   =  1.672 mm/s            [normal]  enviado
+2026-10-17T00:48:09.005Z  corriente   =  34.88 A  potencia = 19.74 kW  [normal]  enviado
+2026-10-17T00:48:10.005Z  vibración   =  1.671 mm/s            [normal]  enviado
+2026-10-17T00:48:11.005Z  vibración   =  1.579 mm/s            [normal]  enviado
+2026-10-17T00:48:11.005Z  corriente   =  34.78 A  potencia = 19.69 kW  [normal]  enviado
+2026-10-17T00:48:12.005Z  vibración   =  1.374 mm/s            [normal]  enviado
+2026-10-17T00:48:12.010Z  temperatura =  59.69 °C              [normal]  enviado
+2026-10-17T00:48:13.005Z  vibración   =  1.436 mm/s            [normal]  enviado
+2026-10-17T00:48:13.005Z  corriente   =  34.48 A  potencia = 19.52 kW  [normal]  enviado
+2026-10-17T00:48:14.005Z  vibración   =  1.435 mm/s            [normal]  enviado
+2026-10-17T00:48:15.005Z  vibración   =  1.515 mm/s            [normal]  enviado
+2026-10-17T00:48:15.005Z  corriente   =  34.13 A  potencia = 19.32 kW  [normal]  enviado
+2026-10-17T00:48:16.005Z  vibración   =  1.462 mm/s            [normal]  enviado
+2026-10-17T00:48:17.005Z  vibración   =  1.511 mm/s            [normal]  enviado
+2026-10-17T00:48:17.005Z  corriente   =  34.74 A  potencia = 19.66 kW  [normal]  enviado
+2026-10-17T00:48:17.005Z  temperatura =  59.88 °C              [normal]  enviado
+2026-10-17T00:48:18.005Z  vibración   =  1.589 mm/s            [normal]  enviado
+2026-10-17T00:48:19.005Z  vibración   =  1.574 mm/s            [normal]  enviado
+2026-10-17T00:48:19.005Z  corriente   =  34.63 A  potencia = 19.60 kW  [normal]  enviado
+2026-10-17T00:48:20.005Z  vibración   =  1.555 mm/s            [normal]  enviado
+2026-10-17T00:48:21.005Z  vibración   =  1.561 mm/s            [normal]  enviado
+2026-10-17T00:48:21.005Z  corriente   =  34.92 A  potencia = 19.77 kW  [normal]  enviado
+2026-10-17T00:48:22.005Z  vibración   =  1.530 mm/s            [normal]  enviado
+2026-10-17T00:48:22.005Z  temperatura =  59.95 °C              [normal]  enviado
+2026-10-17T00:48:23.005Z  vibración   =  1.501 mm/s            [normal]  enviado
+2026-10-17T00:48:23.006Z  corriente   =  35.26 A  potencia = 19.96 kW  [normal]  enviado
+2026-10-17T00:48:24.005Z  vibración   =  1.603 mm/s            [normal]  enviado
+2026-10-17T00:48:25.005Z  vibración   =  1.594 mm/s            [normal]  enviado
+2026-10-17T00:48:25.006Z  corriente   =  34.65 A  potencia = 19.61 kW  [normal]  enviado
+2026-10-17T00:48:26.005Z  vibración   =  1.674 mm/s            [normal]  enviado
+2026-10-17T00:48:27.005Z  vibración   =  1.714 mm/s            [normal]  enviado
+2026-10-17T00:48:27.005Z  corriente   =  35.29 A  potencia = 19.98 kW  [normal]  enviado
+2026-10-17T00:48:27.005Z  temperatura =  60.08 °C              [normal]  enviado
+2026-10-17T00:48:28.005Z  vibración   =  1.687 mm/s            [normal]  enviado
+2026-10-17T00:48:29.005Z  vibración   =  1.664 mm/s            [normal]  enviado
+2026-10-17T00:48:29.006Z  corriente   =  34.99 A  potencia = 19.81 kW  [normal]  enviado
+2026-10-17T00:48:30.005Z  vibración   =  1.611 mm/s            [normal]  enviado
+2026-10-17T00:48:31.005Z  vibración   =  1.650 mm/s            [normal]  enviado
+2026-10-17T00:48:31.006Z  corriente   =  34.58 A  potencia = 19.57 kW  [normal]  enviado
+2026-10-17T00:48:32.005Z  vibración   =  1.649 mm/s            [normal]  enviado
+2026-10-17T00:48:32.005Z  temperatura =  60.44 °C              [normal]  enviado
+2026-10-17T00:48:33.005Z  vibración   =  1.631 mm/s            [normal]  enviado
+2026-10-17T00:48:33.005Z  corriente   =  34.58 A  potencia = 19.57 kW  [normal]  enviado
+2026-10-17T00:48:34.005Z  vibración   =  1.780 mm/s            [normal]  enviado
+2026-10-17T00:48:35.005Z  vibración   =  1.756 mm/s            [normal]  enviado
+2026-10-17T00:48:35.005Z  corriente   =  34.93 A  potencia = 19.77 kW  [normal]  enviado
+2026-10-17T00:48:36.005Z  vibración   =  1.738 mm/s            [normal]  enviado
+2026-10-17T00:48:37.005Z  vibración   =  1.974 mm/s            [normal]  enviado
+2026-10-17T00:48:37.005Z  corriente   =  35.98 A  potencia = 20.37 kW  [normal]  enviado
+2026-10-17T00:48:37.005Z  temperatura =  60.06 °C              [normal]  enviado
+2026-10-17T00:48:38.005Z  vibración   =  1.738 mm/s            [normal]  enviado

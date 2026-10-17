@@ -1,0 +1,32 @@
+Prueba 3: almacenamiento. Consultas Flux a InfluxDB (bucket planta) tras la prueba 1.
+Ejecutada con un script de verificación el 2026-10-16 19:48:04 (hora de Lima).
+
+=== Cantidad de puntos por measurement y campo en el último minuto
+Result: _result
+Table: keys: [_measurement, _field]
+   _measurement:string           _field:string                  _value:int
+----------------------  ----------------------  --------------------------
+         consumo_motor               current_a                          16
+Table: keys: [_measurement, _field]
+   _measurement:string           _field:string                  _value:int
+----------------------  ----------------------  --------------------------
+         consumo_motor                power_kw                          16
+Table: keys: [_measurement, _field]
+   _measurement:string           _field:string                  _value:int
+----------------------  ----------------------  --------------------------
+     temperatura_motor           temperature_c                           7
+Table: keys: [_measurement, _field]
+   _measurement:string           _field:string                  _value:int
+----------------------  ----------------------  --------------------------
+       vibracion_motor           vibration_mms                          32
+
+=== Últimas 5 temperaturas con sus etiquetas
+Result: _result
+Table: keys: [line, machine_id]
+           line:string       machine_id:string                      _time:time                  _value:float
+----------------------  ----------------------  ------------------------------  ----------------------------
+            envasado-1                motor-01  2026-10-17T00:48:17.005000000Z                         59.88
+            envasado-1                motor-01  2026-10-17T00:48:22.005000000Z                         59.95
+            envasado-1                motor-01  2026-10-17T00:48:27.005000000Z                         60.08
+            envasado-1                motor-01  2026-10-17T00:48:32.005000000Z                         60.44
+            envasado-1                motor-01  2026-10-17T00:48:37.005000000Z                         60.06
